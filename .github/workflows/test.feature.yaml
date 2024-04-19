@@ -1,0 +1,30 @@
+name: test-feature
+on: [workflow_call]
+env:
+  DEPLOY_REVISION: "pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}"
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: ${{secrets.AWS_REGION }}
+  AWS_ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
+  AWS_EKS_CLUSTER: ${{ secrets.AWS_EKS_CLUSTER }}
+  JWT_TOKEN_LONGEVITY: ${{ secrets.JWT_TOKEN_LONGEVITY }}
+  JWT_KEY: ${{ secrets.JWT_KEY }}
+  SENDGRID_USER_CREATED_MAIL_TEMPLATE_ID: ${{ secrets.SENDGRID_USER_CREATED_MAIL_TEMPLATE_ID }}
+  SENDGRID_OTP_MAIL_TEMPLATE_ID: $${{ secrets.SENDGRID_OTP_MAIL_TEMPLATE_ID }}
+  SENDGRID_USER_PASSWORD_UPDATED_TEMPLATE_ID: ${{ secrets.SENDGRID_USER_PASSWORD_UPDATED_TEMPLATE_ID }}
+  PG_SECRET: ${{ secrets.PG_SECRET }}
+  REDIS_HOST: ${{ secrets.REDIS_HOST }}
+  REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+  SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      # Install Node.js dependencies
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+      - run: cd auth && npm install && npm run test:ci
