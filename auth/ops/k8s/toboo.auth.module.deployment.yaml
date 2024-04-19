@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: toboo-auth-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: toboo-api-auth
+  template:
+    metadata:
+      labels:
+        app: toboo-api-auth
+    spec:
+      containers:
+        - name: toboo-api-auth
+          image: auth
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: toboo-configs
+                  key: POSTGRES_DB
+
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: toboo-configs
+                  key: POSTGRES_USER
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: toboo-api-auth-service
+spec:
+  selector:
+    app: toboo-api-auth
+  ports:
+    - name: toboo-api-auth
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
