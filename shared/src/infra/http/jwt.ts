@@ -1,7 +1,9 @@
 import jwt from "jsonwebtoken";
 import { uid } from "rand-token";
 
-import { Result, Guard } from "../..";
+import { Guard, Either, left, right } from "../..";
+import { DomainErrors } from "../..";
+
 const { JWT_KEY, JWT_TOKEN_LONGEVITY } = process.env;
 
 import { KeyValuePairs } from "../../core";
@@ -25,30 +27,43 @@ export type RefreshToken = string;
  *
  */
 export type Session = string;
+
 /**
  *
  */
+export type JWTResult<T> = Either<
+  | DomainErrors.TokenSigningFailed
+  | DomainErrors.TokenExtractionFailed
+  | DomainErrors.RefreshTokenCannotBeIssued,
+  T
+>;
+
 export class JWT {
   /**
    *
    */
-  static decodeJWT(token: string): Result<JWTClaims> {
+  static decodeJWT(token: string): JWTResult<JWTClaims> {
     /**
      *
      */
     try {
       const decoded = jwt.verify(token, JWT_KEY!);
 
-      return Result.ok(decoded! as JWTClaims);
-    } catch (err: any) {
-      return Result.fail(err?.message);
+      return right(decoded! as JWTClaims);
+    } catch (error: any) {
+      /**
+       *
+       */
+      return left(
+        new DomainErrors.TokenExtractionFailed(token, error?.message),
+      );
     }
   }
 
   /**
    *
    */
-  static signJWT(props: JWTClaims): Result<JWToken> {
+  static signJWT(props: JWTClaims): JWTResult<JWToken> {
     const claims: JWTClaims = {
       id: props.id,
       email: props.email,
@@ -56,42 +71,47 @@ export class JWT {
     };
 
     try {
-      const guard = Guard.Numeric(
+      const nanGuard = Guard.Numeric(
         JWT_TOKEN_LONGEVITY,
         "JWT:signJWT:tokenLongevity",
       );
 
-      if (guard.isFailure) {
-        /**
-         * */
-        return Result.fail("Non numeric value for JWT token longevity");
+      if (nanGuard.isFailure) {
+        return left(
+          new DomainErrors.InvalidData(
+            "JWT:signJWT:tokenLongevity",
+            nanGuard.error!.toString(),
+          ),
+        );
       }
 
-      return Result.ok(
+      return right(
         jwt.sign(claims, JWT_KEY!, {
           expiresIn: Number.parseInt(JWT_TOKEN_LONGEVITY!),
         }),
       );
     } catch (error: any) {
       /**
+       *
        */
-      return Result.fail(error?.message);
+      return left(new DomainErrors.TokenSigningFailed(claims, error?.message));
     }
   }
   /***
    *
    */
-  static createRefreshToken(): Result<string> {
+  static createRefreshToken(): JWTResult<string> {
     try {
       /**
        *
        */
-      return Result.ok(uid(256));
+      return right(uid(256));
     } catch (error: any) {
       /**
        *
        */
-      return Result.fail(`Failed to genrate token ${error?.message}`);
+
+      return left(new DomainErrors.RefreshTokenCannotBeIssued(error?.message));
     }
   }
 }

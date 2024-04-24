@@ -11,11 +11,11 @@
  */
 
 import { Response, Request } from "express";
-import { ApiErrors, AppErrors, HttpError } from "../error";
+import { ApiErrors } from "../error";
 import { nil } from "../core";
 
 type Failure =
-  | AppErrors.UnexpectedHalt
+  | ApiErrors.UnexpectedHalt
   | ApiErrors.NotFound
   | ApiErrors.NotAuthenticated
   | ApiErrors.BadRequest

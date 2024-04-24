@@ -10,7 +10,7 @@
  * ```
  */
 import { IInitOptions } from "pg-promise";
-import { Dispatcher, UniqueId } from "../../";
+import { Dispatcher, UniqueId } from "../../..";
 
 import { IExtensions } from "./extension";
 

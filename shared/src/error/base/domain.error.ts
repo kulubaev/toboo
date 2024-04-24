@@ -18,8 +18,7 @@ export abstract class DomainError extends Error {
   /**
    *
    */
-
-  abstract Reason: string;
+  reason: string = this.serialize().message;
 
   /**
    *
@@ -33,5 +32,5 @@ export abstract class DomainError extends Error {
    *
    */
 
-  abstract serialize(): ISerializeError[];
+  abstract serialize(): ISerializeError;
 }

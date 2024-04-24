@@ -11,11 +11,14 @@
  */
 
 export {
-  AppErrors,
   ApiErrors,
   DomainError,
   HttpError,
   UseCaseError,
+  RedisErrors,
+  SessionErrors,
+  DomainErrors,
+  ISerializeError,
 } from "./error";
 /**
  *
@@ -50,3 +53,12 @@ export { Result, Guard, Either, KeyValuePairs, nil, left, right } from "./core";
 /**
  */
 export { Controller, UseCase, Middleware, app } from "./api";
+
+/**
+ *
+ */
+export { Mapper, MapResult } from "./mapper";
+/**
+ *
+ */
+export { TextUtils, FormDataParser, sqfle } from "./utils";

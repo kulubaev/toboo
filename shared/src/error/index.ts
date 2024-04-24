@@ -1,6 +1,8 @@
 /**
  *
  */
-export { HttpError, UseCaseError, DomainError } from "./base";
+export { HttpError, UseCaseError, DomainError, ISerializeError } from "./base";
 export { ApiErrors } from "./api.errors";
-export { AppErrors } from "./app.errors";
+export { RedisErrors } from "./redis.errors";
+export { SessionErrors } from "./session.errors";
+export { DomainErrors } from "./domain.errors";

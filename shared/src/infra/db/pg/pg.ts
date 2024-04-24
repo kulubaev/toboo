@@ -19,7 +19,7 @@ import pgPromise, { IDatabase, IMain } from "pg-promise";
 
 import { newDb, DataType, IMemoryDb } from "pg-mem";
 
-import { KeyValuePairs } from "../../";
+import { KeyValuePairs } from "../../..";
 
 import { IExtensions } from "./extension";
 import { initOptions } from "./init";

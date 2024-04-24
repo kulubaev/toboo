@@ -10,4 +10,15 @@
  * ```
  */
 
+import { Either, Guard, DomainErrors } from "..";
+
+/**
+ *
+ */
+
 export abstract class Mapper {}
+
+/**
+ *
+ */
+export type MapResult<T> = Either<DomainErrors.RequiredParameterNotPresent, T>;

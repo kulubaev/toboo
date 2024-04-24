@@ -12,18 +12,11 @@
 
 export abstract class UseCaseError extends Error {
   /**
-   *
-   */
-
-  abstract Parameter: string;
-
-  /**
    */
   constructor(
     public readonly parameter: string,
     public readonly message: string,
   ) {
     super();
-    this.parameter = parameter;
   }
 }

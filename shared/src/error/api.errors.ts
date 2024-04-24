@@ -27,7 +27,7 @@ export namespace ApiErrors {
     /*
      */
 
-    constructor() {
+    constructor(readonly reason: string = "Malformed request") {
       super("Malformed request");
     }
     /**
@@ -51,8 +51,8 @@ export namespace ApiErrors {
     /*
      */
 
-    constructor() {
-      super("Not autthenticated");
+    constructor(readonly reason: string = "Not authenticated") {
+      super("Not authenticated");
     }
     /**
      *
@@ -75,7 +75,7 @@ export namespace ApiErrors {
     /*
      */
 
-    constructor() {
+    constructor(readonly reason: string = "Not authorized") {
       super("Not autorized");
     }
     /**
@@ -99,7 +99,7 @@ export namespace ApiErrors {
     /*
      */
 
-    constructor() {
+    constructor(readonly reason: string = "Resource not found") {
       super("Resource not found");
     }
     /**
@@ -111,6 +111,34 @@ export namespace ApiErrors {
        */
 
       return { message: "Resource not found" };
+    }
+  }
+  /**
+   *
+   */
+  export class UnexpectedHalt extends HttpError {
+    /*
+     */
+    statusCode = 500;
+    /*
+     */
+
+    constructor(readonly reason: string) {
+      super("Encountered unexpected halt");
+
+      if (reason) {
+        this.reason = reason;
+      }
+    }
+    /**
+     *
+     */
+
+    serialize(): ISerializeError {
+      /*
+       */
+
+      return { message: "Encountered unexpected halt" };
     }
   }
 }

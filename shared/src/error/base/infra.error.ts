@@ -14,12 +14,11 @@ import { ISerializeError } from ".";
 /**
  */
 
-export abstract class HttpError extends Error {
+export abstract class InfraError extends Error {
   /**
    *
    */
 
-  abstract statusCode: number;
   abstract reason: string;
 
   /**
