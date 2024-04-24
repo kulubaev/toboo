@@ -7,9 +7,23 @@ metadata:
 manifests:
   rawYaml:
     - ./ops/k8s/*
+    - ./auth/ops/k8s/*
 
 build:
   artifacts:
+    - image: "pg"
+      context: ./db/pg
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          ENV: development
+          POSTGRES_HOST: "{{ .POSTGRES_HOST }}"
+          POSTGRES_DB: "{{ .POSTGRES_DB }}"
+          POSTGRES_PASSWORD: "{{ .POSTGRES_PASSWORD }}"
+          POSTGRES_PORT: "{{ .POSTGRES_PORT }}"
+          POSTGRES_USER: "{{ .POSTGRES_USER }}"
+          PORT: "{{ .PORT }}"
+
     - image: "auth"
       context: ./auth
       docker:

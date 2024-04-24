@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
-    certmanager.k8s.io/cluster-issuer: letsencrypt-cai
+    certmanager.k8s.io/cluster-issuer: letsencrypt-toboo
   namespace: default
 spec:
   rules:

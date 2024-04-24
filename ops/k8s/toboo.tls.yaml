@@ -8,14 +8,14 @@ spec:
   dnsNames:
     - api.to.boo
   issuerRef:
-    name: letsencrypt-cai
+    name: letsencrypt-toboo
     kind: ClusterIssuer
 
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-cai
+  name: letsencrypt-toboo
   namespace: cert-manager
 spec:
   acme:

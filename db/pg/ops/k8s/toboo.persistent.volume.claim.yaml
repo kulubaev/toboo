@@ -1,0 +1,10 @@
+##
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: toboo-api-postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:

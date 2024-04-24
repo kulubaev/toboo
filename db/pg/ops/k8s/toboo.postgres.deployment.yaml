@@ -1,0 +1,71 @@
+##
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: toboo-api-postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: toboo-api-postgres
+  template:
+    metadata:
+      labels:
+        app: toboo-api-postgres
+    spec:
+      volumes:
+        - name: toboo-api-postgres-storage
+          persistentVolumeClaim:
+            claimName: toboo-api-postgres-pvc
+      containers:
+        - name: toboo-api-postgres
+          image: pg
+          volumeMounts:
+            - name: toboo-api-postgres-storage
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: toboo-configs
+                  key: POSTGRES_DB
+
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: toboo-configs
+                  key: POSTGRES_USER
+
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: toboodrive-configs
+                  key: POSTGRES_PORT
+
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: toboo-configs
+                  key: POSTGRES_HOST
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: toboo-secrets
+                  key: tobooDRIVE_PG_SECRET
+
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: toboo-api-postgres-service
+spec:
+  selector:
+    app: toboo-api-postgres
+  ports:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      targetPort: 5432

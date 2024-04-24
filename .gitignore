@@ -28,6 +28,9 @@ yarn-error.log
 /packages/**/LICENSE
 *.tsbuildinfo
 
+# configs
+/conf
+/config
 
 # conf
 /conf

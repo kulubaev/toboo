@@ -11,6 +11,7 @@
  */
 
 import express, { Request, Response } from "express";
+import { getUserApi } from "../../use.case";
 
 const router = express.Router();
 
@@ -26,5 +27,10 @@ router.post("/signout", (req: Request, res: Response) => {});
 /**
  */
 router.post("/signin/new_token", (req: Request, res: Response) => {});
+/**
+ */
+router.get("/users/:id", (req: Request, res: Response) => {
+  getUserApi.execute(req, res);
+});
 
 export { router };
