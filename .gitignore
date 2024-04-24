@@ -29,6 +29,11 @@ yarn-error.log
 *.tsbuildinfo
 
 
+# conf
+/conf
+/config
+
+
 # tests
 /test
 /coverage

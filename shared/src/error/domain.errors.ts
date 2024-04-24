@@ -24,23 +24,16 @@ export namespace DomainErrors {
   export class InvalidData extends DomainError {
     /**
      */
-
-    reason: string = this.serialize().message;
-    /**
-     */
     constructor(
       readonly parameter: string,
+      reason: string | void,
       message?: string,
-      reason?: string,
     ) {
       super(
+        reason,
         message ||
           `Invalid data type for the  parameter ${parameter}. Please ensure parameter has correct data type `,
       );
-
-      if (reason) {
-        this.reason = reason;
-      }
     }
 
     serialize(): ISerializeError {
@@ -57,25 +50,19 @@ export namespace DomainErrors {
    *
    */
   export class RequiredParameterNotPresent extends DomainError {
-    /**
-     */
-    reason: string = `Required parameter ${this.parameter} is not present. Please make Sure its presence `;
     /***
      *
      */
     constructor(
       readonly parameter: string,
+      reason: string | void,
       message?: string,
-      reason?: string,
     ) {
       super(
+        reason,
         message ||
           `Required parameter ${parameter} is not present. Please make Sure its presence `,
       );
-
-      if (reason) {
-        this.reason = reason;
-      }
     }
 
     /**
@@ -101,15 +88,8 @@ export namespace DomainErrors {
     /*
      */
 
-    constructor(
-      public readonly reason: string,
-      message?: string,
-    ) {
-      super(message || "Encountered unexpected halt");
-
-      if (reason) {
-        this.reason = reason;
-      }
+    constructor(reason: string | void, message?: string) {
+      super(reason, message || "Encountered unexpected halt");
     }
     /**
      *
@@ -135,20 +115,12 @@ export namespace DomainErrors {
      *
      */
 
-    reason: string = this.serialize().message;
-    /*
-     */
-
     constructor(
       readonly token: string,
       reason: string,
       message?: string,
     ) {
-      super(message || "Token cannot be decoded");
-
-      if (reason) {
-        this.reason = reason;
-      }
+      super(reason, message || "Token cannot be decoded");
     }
     /**
      *
@@ -170,20 +142,12 @@ export namespace DomainErrors {
      *
      */
 
-    reason: string = this.serialize().message;
-    /*
-     */
-
     constructor(
       readonly claims: JWTClaims,
-      reason: string,
+      reason: string | void,
       message?: string,
     ) {
-      super(message || "Cannot sign a token");
-
-      if (reason) {
-        this.reason = reason;
-      }
+      super(reason, message || "Cannot sign a token");
     }
     /**
      *
@@ -205,16 +169,8 @@ export namespace DomainErrors {
      *
      */
 
-    reason: string = this.serialize().message;
-    /*
-     */
-
-    constructor(reason: string, message?: string) {
-      super(message || "Cannot create a refresh token");
-
-      if (reason) {
-        this.reason = reason;
-      }
+    constructor(reason: string | void, message?: string) {
+      super(reason, message || "Cannot create a refresh token");
     }
     /**
      *

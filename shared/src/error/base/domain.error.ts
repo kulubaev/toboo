@@ -18,14 +18,14 @@ export abstract class DomainError extends Error {
   /**
    *
    */
-  reason: string = this.serialize().message;
 
-  /**
-   *
-   */
-
-  constructor(public message: string) {
+  constructor(
+    public readonly reason: string | void,
+    public message: string,
+  ) {
     super(message);
+
+    this.reason = this.reason || this.serialize().message;
   }
 
   /**

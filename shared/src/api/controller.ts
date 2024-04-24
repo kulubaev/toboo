@@ -67,4 +67,21 @@ export abstract class Controller {
    */
 
   protected abstract executing(req: Request, res: Response): Promise<void>;
+
+  /**
+   *
+   */
+
+  async execute(req: Request, res: Response): Promise<void> {
+    try {
+      /*
+       */
+
+      return this.executing(req, res);
+    } catch (error: any) {
+      /**
+       */
+      this.failed(res, new ApiErrors.UnexpectedHalt(error.message));
+    }
+  }
 }
