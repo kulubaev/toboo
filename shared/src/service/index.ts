@@ -2,4 +2,9 @@
  *
  */
 
-export { ISessionService, SessionService, sessionService } from "./session";
+export {
+  ISessionService,
+  SessionService,
+  SessionResult,
+  sessionService,
+} from "./session";

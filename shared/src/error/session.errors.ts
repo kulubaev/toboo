@@ -10,6 +10,7 @@
  * ```
  */
 
+import { JWTClaims } from "../infra";
 import { InfraError, ISerializeError } from "./base";
 
 /**
@@ -23,18 +24,12 @@ export namespace SessionErrors {
   export class CannotConnect extends InfraError {
     /*
      */
-    reason = "Cannot connect to session store";
-    /*
-     */
 
-    constructor(reason?: string) {
-      super("Cannot connect to session store");
-
-      if (reason) {
-        /**
-         */
-        this.reason = reason;
-      }
+    constructor(
+      readonly reason: string | void,
+      message?: string,
+    ) {
+      super(reason, message || "Cannot connect to session store");
     }
 
     /**
@@ -54,22 +49,13 @@ export namespace SessionErrors {
   export class NoSessionFound extends InfraError {
     /*
      */
-    reason: string = "No session found for given token";
-    /*
-     */
 
     constructor(
-      private readonly token: string,
-      reason?: string,
+      private readonly key: string,
+      readonly reason: string | void,
+      message?: string,
     ) {
-      super("No session found for given token");
-
-      if (reason) {
-        /**
-         *
-         */
-        this.reason = reason;
-      }
+      super(reason, message || "No session found for given key");
     }
     /**
      *
@@ -79,7 +65,7 @@ export namespace SessionErrors {
       /*
        */
 
-      return { message: `No session found for given token ${this.token}` };
+      return { message: `No session found for given key ${this.key}` };
     }
   }
 
@@ -89,19 +75,16 @@ export namespace SessionErrors {
   export class CannotRetrieveSessionEntry extends InfraError {
     /*
      */
-    reason = "Cannot retrieve session entry";
-    /*
-     */
 
     constructor(
       private key: string,
-      reason?: string,
+      readonly reason: string | void,
+      message?: string,
     ) {
-      super("Cannot retrieve session entry");
-
-      if (reason) {
-        this.reason = reason;
-      }
+      super(
+        reason,
+        message || "Cannot retrieve session entry for the given key",
+      );
     }
     /**
      *
@@ -123,16 +106,13 @@ export namespace SessionErrors {
   export class CannotRetrievSessionEntries extends InfraError {
     /*
      */
-    reason = "Cannot retrieve session entries";
-    /*
-     */
 
-    constructor(reason?: string) {
-      super("Cannot retrieve session entries");
-
-      if (reason) {
-        this.reason = reason;
-      }
+    constructor(
+      private readonly key: string,
+      readonly reason: string | void,
+      message?: string,
+    ) {
+      super(reason, message || "Cannot retrieve session entries");
     }
     /**
      *
@@ -142,7 +122,7 @@ export namespace SessionErrors {
       /*
        */
 
-      return { message: "Cannot retrieve session entries" };
+      return { message: `Cannot retrieve session entries for key ${this.key}` };
     }
   }
   /**
@@ -151,15 +131,13 @@ export namespace SessionErrors {
   export class CannotClearSessionEntries extends InfraError {
     /*
      */
-    reason = "Cannot clear session entries for given key";
-    /*
-     */
 
     constructor(
       private readonly id: string,
-      reason?: string,
+      readonly reason: string | void,
+      message?: string,
     ) {
-      super("Cannot clear session entries for given key");
+      super(reason, message || "Cannot clear session entries for given key");
 
       if (reason) {
         this.reason = reason;
@@ -186,10 +164,6 @@ export namespace SessionErrors {
      */
     constructor(readonly reason: string) {
       super("Encountered unexpected halt");
-
-      if (reason) {
-        this.reason = reason;
-      }
     }
     /**
      *
@@ -200,6 +174,91 @@ export namespace SessionErrors {
        */
 
       return { message: "Encountered unexpected halt" };
+    }
+  }
+  /**
+   *
+   */
+  export class CannotIssueRefreshToken extends InfraError {
+    /*
+     */
+
+    constructor(
+      private readonly id: string,
+      readonly reason: string | void,
+      message?: string,
+    ) {
+      super(reason, message || "Cannot issue refresh token for the session");
+    }
+    /**
+     *
+     */
+
+    serialize(): ISerializeError {
+      /*
+       */
+
+      return {
+        message: `Cannot issue refresh token  for the key ${this.id} `,
+      };
+    }
+  }
+  /**
+   *
+   */
+  export class CannotClearSessionToken extends InfraError {
+    /*
+     */
+
+    constructor(
+      readonly session: string,
+      readonly reason: string | void,
+      message?: string,
+    ) {
+      super(reason, message || "Cannot remove account token for the session");
+    }
+    /**
+     *
+     */
+
+    serialize(): ISerializeError {
+      /*
+       */
+
+      return {
+        message: `Cannot remove account token  for the active session ${this.session}`,
+      };
+    }
+  }
+
+  /**
+   *
+   */
+  export class CannotSignSessionToken extends InfraError {
+    /*
+     */
+
+    constructor(
+      private claims: JWTClaims,
+      readonly session: string,
+      readonly reason: string | void,
+      message?: string,
+    ) {
+      super(reason, message || "Cannot sign account token for the session");
+    }
+    /**
+     *
+     */
+
+    serialize(): ISerializeError {
+      /*
+       */
+
+      return {
+        message: `Cannot not sign account token for the claim ${JSON.stringify(
+          this.claims,
+        )}`,
+      };
     }
   }
 }

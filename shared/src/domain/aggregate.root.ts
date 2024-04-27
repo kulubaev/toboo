@@ -19,13 +19,15 @@ export abstract class AggregateRoot<T> extends Entity<T> {
   /**
    *
    */
-  abstract get id(): { value: UniqueId };
+  private domainEvents: IDomainEvent[] = [];
 
   /**
    *
    */
-  private domainEvents: IDomainEvent[] = [];
 
+  get id(): UniqueId {
+    return this._id;
+  }
   /**
    *
    */

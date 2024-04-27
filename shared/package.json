@@ -1,6 +1,6 @@
 {
   "name": "@toboo/shared",
-  "version": "0.0.19",
+  "version": "0.0.27",
   "description": "toboo.shared",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",

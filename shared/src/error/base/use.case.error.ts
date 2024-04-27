@@ -14,9 +14,9 @@ export abstract class UseCaseError extends Error {
   /**
    */
   constructor(
-    public readonly parameter: string,
     public readonly message: string,
+    public readonly parameter?: string,
   ) {
-    super();
+    super(message);
   }
 }

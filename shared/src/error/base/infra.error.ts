@@ -19,13 +19,10 @@ export abstract class InfraError extends Error {
    *
    */
 
-  abstract reason: string;
-
-  /**
-   *
-   */
-
-  constructor(public message: string) {
+  constructor(
+    readonly reason: string | void,
+    message?: string,
+  ) {
     super(message);
   }
 

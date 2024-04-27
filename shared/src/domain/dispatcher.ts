@@ -64,7 +64,7 @@ export class Dispatcher {
     for (const aggregate of this.aggregates) {
       /**
        */
-      if (aggregate.id.value.equals(id)) {
+      if (aggregate.id.equals(id)) {
         result = aggregate;
 
         break;
@@ -89,7 +89,7 @@ export class Dispatcher {
   static addAggregate(aggregate: AggregateRoot<any>): void {
     /**
      */
-    if (!this.getAggregate(aggregate.id.value)) {
+    if (!this.getAggregate(aggregate.id)) {
       /**
        */
       this.aggregates.push(aggregate);

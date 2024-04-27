@@ -18,6 +18,7 @@ export {
   RedisErrors,
   SessionErrors,
   DomainErrors,
+  UseCaseErrors,
   ISerializeError,
 } from "./error";
 /**
@@ -39,10 +40,14 @@ export {
  *
  */
 export {
+  JWT,
   JWToken,
   JWTClaims,
   RefreshToken,
   Session,
+  RedisClient,
+  RedisResult,
+  RedisClientType,
   pgp,
   pgdb,
   db,
@@ -62,3 +67,13 @@ export { Mapper, MapResult } from "./mapper";
  *
  */
 export { TextUtils, FormDataParser, sqfle } from "./utils";
+/***
+ *
+ */
+
+export {
+  ISessionService,
+  SessionService,
+  SessionResult,
+  sessionService,
+} from "./service";
