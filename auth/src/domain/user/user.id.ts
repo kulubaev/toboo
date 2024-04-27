@@ -14,10 +14,13 @@ import {
   ValueObject,
   UniqueId,
   Guard,
+  DomainErrors,
   left,
   right,
-  DomainErrors,
 } from "@toboo/shared";
+
+import { UserIdErrors } from "../../error";
+import { UserIdResult } from ".";
 
 /**
  *
@@ -36,42 +39,55 @@ export interface UserIdProps {
  */
 export class UserId extends ValueObject<UserIdProps> {
   /**
-   * Comment.
+   *
    */
-  public get value(): string {
+  public get value(): UniqueId {
     return this.props.value;
   }
   /**
    *
    */
-  private constructor(value: string) {
+  private constructor(value: UniqueId) {
     super({ value });
   }
   /**
-   * Comment.
    */
-  public static create(value: string): UserIdResult {
+  public static create(value: string | UniqueId): UserIdResult {
     try {
       /**
-       * Comment.
        */
-      let guardResult = Guard.NullOrUndefined(value, "UserId:create:value");
+      const guard = Guard.NullOrUndefined(value, "UserId:create:value");
 
       /**
-       * Comment.
        */
-      if (guardResult.isFailure) {
-        return left(new UserIdErrors.UserIdValueNotPresent());
+      if (guard.isFailure) {
+        return left(
+          new DomainErrors.RequiredParameterNotPresent(
+            "UserId",
+            guard.error?.message,
+          ),
+        );
       }
 
       /**
-       * Comment.
        */
+
+      if (value instanceof UniqueId) {
+        /**
+         */
+        return right(new UserId(value));
+      }
+
       return right(new UserId(new UniqueId(value)));
     } catch (error: any) {
       /**
        *
        */
+
+      if (value instanceof UniqueId) {
+        return left(new UserIdErrors.UserIdCreationFailed(value.toString()));
+      }
+
       return left(new UserIdErrors.UserIdCreationFailed(value));
     }
   }

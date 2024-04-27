@@ -9,10 +9,17 @@ import {
   left,
   right,
   nil,
+  UniqueId,
 } from "@toboo/shared";
-import { UserId } from "../../domain";
+import { UserId, User, UserEmail, UserSecret } from "../../domain";
 import { UserDto } from "../../dto";
-import { UserMapErrors } from "../../error";
+import {
+  UserEmailErrors,
+  UserErrors,
+  UserIdErrors,
+  UserMapErrors,
+  UserSecretErrors,
+} from "../../error";
 import { UserMapResult } from ".";
 /**
  * What it does.
@@ -29,6 +36,205 @@ export class UserMap extends Mapper {
   /**
    *
    */
+  public static toPersist(user: User): UserMapResult<KeyValuePairs> {
+    try {
+      /**
+       *
+       */
+
+      let guard = Guard.NullOrUndefined(user, "UserMap:toPersist:user");
+
+      if (guard.isFailure) {
+        /**
+         */
+        return left(
+          new DomainErrors.RequiredParameterNotPresent(
+            "UserMap:toPersist:user",
+          ),
+        );
+      }
+      /**
+       *
+       */
+
+      guard = Guard.NullOrUndefined(user.id, "UserMap:toPersist:user:id");
+
+      if (guard.isFailure) {
+        /**
+         */
+        return left(
+          new DomainErrors.RequiredParameterNotPresent(
+            "UserMap:toPersist:user:id",
+          ),
+        );
+      }
+      /**
+       *
+       */
+
+      guard = Guard.NullOrUndefined(user.email, "UserMap:toPersist:user:email");
+
+      if (guard.isFailure) {
+        /**
+         */
+        return left(
+          new DomainErrors.RequiredParameterNotPresent(
+            "UserMap:toPersist:user:email",
+          ),
+        );
+      }
+      /**
+       *
+       */
+
+      guard = Guard.NullOrUndefined(
+        user.email,
+        "UserMap:toPersist:user:secret",
+      );
+
+      if (guard.isFailure) {
+        /**
+         */
+        return left(
+          new DomainErrors.RequiredParameterNotPresent(
+            "UserMap:toPersist:user:secret",
+          ),
+        );
+      }
+
+      return right({
+        id: user.id.toString(),
+        email: user.email.value,
+        secret: user.secret.value,
+      });
+    } catch (error: any) {
+      /**
+       *
+       */
+      return left(new UserMapErrors.UserMapFailed(error?.message));
+    }
+  }
+  /**
+   *
+   */
+
+  public static async toDomain(
+    raw: KeyValuePairs,
+  ): Promise<UserMapResult<User>> {
+    try {
+      /**
+       *
+       */
+
+      let guard = Guard.NullOrUndefined(raw, "UserMap:toDomain:raw");
+
+      if (guard.isFailure) {
+        /**
+         */
+        return left(
+          new DomainErrors.RequiredParameterNotPresent("UserMap:toDomain:raw"),
+        );
+      }
+
+      /**
+       */
+      guard = Guard.NullOrUndefined(raw.id, "UserMap:toDto:raw:id");
+
+      if (guard.isFailure) {
+        /**
+         */
+        return left(
+          new DomainErrors.RequiredParameterNotPresent(
+            "UserMap:toDomain:raw:id",
+          ),
+        );
+      }
+
+      /**
+       */
+      guard = Guard.NullOrUndefined(raw.email, "UserMap:toDomain:raw:email");
+
+      if (guard.isFailure) {
+        /**
+         */
+        return left(
+          new DomainErrors.RequiredParameterNotPresent(
+            "UserMap:toDomain:raw:email",
+          ),
+        );
+      }
+
+      /**
+       */
+      guard = Guard.NullOrUndefined(raw.email, "UserMap:toDomain:raw:secret");
+
+      if (guard.isFailure) {
+        /**
+         */
+        return left(
+          new DomainErrors.RequiredParameterNotPresent(
+            "UserMap:toDomain:raw:secret",
+          ),
+        );
+      }
+
+      /**
+       */
+      const userEmail = UserEmail.create(raw.email);
+      if (userEmail.isLeft()) {
+        /**
+         */
+        return left(
+          new UserEmailErrors.UserEmailCreationFailed(
+            raw.email,
+            userEmail.value.reason,
+            userEmail.value.message,
+          ),
+        );
+      }
+      /**
+       */
+      const userSecret = await UserSecret.create(raw.secret, true);
+      if (userSecret.isLeft()) {
+        /**
+         */
+        return left(
+          new UserSecretErrors.UserSecretCreationFailed(
+            userSecret.value.reason,
+            userSecret.value.message,
+          ),
+        );
+      }
+
+      /**
+       */
+      const user = User.create(
+        {
+          email: userEmail.value,
+          secret: userSecret.value,
+          verified: !!raw.verified,
+        },
+        new UniqueId(raw.id),
+      );
+
+      if (user.isLeft()) {
+        /**
+         */
+        return left(
+          new UserErrors.UserCreationFailed(
+            user.value.reason,
+            user.value.message,
+          ),
+        );
+      }
+
+      return right(user.value);
+    } catch (error: any) {
+      /**
+       */
+      return left(new UserMapErrors.UserMapFailed(error?.message));
+    }
+  }
 
   /**
    *

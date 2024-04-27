@@ -16,22 +16,16 @@ import { DomainError, ISerializeError } from "@toboo/shared";
  *
  *
  */
-export namespace UserIdErrors {
+export namespace UserMapErrors {
   /**
    *
    */
-  export class UserIdCreationFailed extends DomainError {
-    /*
-     */
-    reason = this.serialize()?.message;
+  export class UserMapFailed extends DomainError {
     /*
      */
 
-    constructor(
-      readonly id: string,
-      reason: string | void,
-    ) {
-      super(reason, "User Id cannot be created");
+    constructor(reason: string | void, message?: string) {
+      super(reason, message || "User Map failed");
     }
     /**
      *
@@ -42,7 +36,8 @@ export namespace UserIdErrors {
        */
 
       return {
-        message: `User Id can not be created for value ${this.id}`,
+        message:
+          "UserMap has failed, please ensure the validity of parameters being mapped",
       };
     }
   }

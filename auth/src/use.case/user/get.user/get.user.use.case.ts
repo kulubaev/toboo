@@ -18,17 +18,18 @@ import {
   Result,
   UniqueId,
   DomainErrors,
+  UseCaseErrors,
   nil,
   left,
   right,
 } from "@toboo/shared";
 
 import { UserId } from "../../../domain";
+import { UserErrors } from "../../../error";
 import { GetUserRequest } from "./get.user.request";
 import { GetUserResponse } from "./get.user.response";
 import { IUserRepo } from "../../../repo";
-import { UseCaseErrors, UserIdErrors } from "../../../error";
-import { GetUserErrors, UserErrors } from "../../../error/user";
+import { GetUserErrors } from "./get.user.errors";
 
 /**
  *
@@ -89,7 +90,7 @@ export class GetUserUseCase
         return left(
           new GetUserErrors.UserCanNotBeRetrieved(
             req.id!,
-            `Unexpected error.User with id ${req.id!} can not be retrieved`,
+            `Unexpected error. User with id ${req.id!} can not be retrieved`,
           ),
         );
       }
@@ -101,9 +102,7 @@ export class GetUserUseCase
       /**
        *
        */
-      return left(
-        new GetUserErrors.UserRetrievalFailed(req.id!, error?.message),
-      );
+      return left(new DomainErrors.UnexpectedHalt(error?.message));
     }
   }
 }

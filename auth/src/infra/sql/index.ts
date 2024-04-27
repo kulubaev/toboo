@@ -17,5 +17,7 @@ export const sql = {
    */
   user: {
     find_one: sqfle(join(__dirname, "user/find.one.sql")),
+    find_email: sqfle(join(__dirname, "user/find.email.sql")),
+    add_one: sqfle(join(__dirname, "user/add.one.sql")),
   },
 };

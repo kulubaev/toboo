@@ -14,20 +14,20 @@ import { Request, Response } from "express";
 import { Controller, UseCase, ApiErrors, UseCaseErrors } from "@toboo/shared";
 
 import { UserDto } from "../../../dto";
-import { GetUserRequest } from "./get.user.request";
-import { GetUserResponse } from "./get.user.response";
 import { UserErrors } from "../../../error";
-import { GetUserErrors } from "./get.user.errors";
+import { CreateUserRequest } from "./create.user.request";
+import { CreateUserResponse } from "./create.user.response";
+import { CreateUserErrors } from "./create.user.errors";
 
 /**
  *
  */
-export class GetUserController extends Controller {
+export class CreateUserController extends Controller {
   /**
    *
    */
 
-  constructor(private useCase: UseCase<GetUserRequest, GetUserResponse>) {
+  constructor(private useCase: UseCase<CreateUserRequest, CreateUserResponse>) {
     super();
   }
 
@@ -46,7 +46,8 @@ export class GetUserController extends Controller {
        */
 
       const result = await this.useCase.execute({
-        id: req.query.id?.toString(),
+        email: req.body.email,
+        secret: req.body.secret,
       });
 
       if (result.isRight()) {
@@ -61,13 +62,14 @@ export class GetUserController extends Controller {
         /**
          */
 
-        case GetUserErrors.UserCanNotBeFound:
+        case CreateUserErrors.UserEmailAlreadyRegistered:
         case UseCaseErrors.RequiredFieldError:
         case UseCaseErrors.InvalidDataError:
           this.failed(res, new ApiErrors.BadRequest(result.value?.message));
           break;
 
         case UserErrors.UserRetrievalFailed:
+        case CreateUserErrors.UserCreationFailed:
         default:
           this.failed(res, new ApiErrors.UnexpectedHalt(result.value?.message));
           break;

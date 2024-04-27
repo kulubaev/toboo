@@ -1,4 +1,10 @@
 /**
  *
  */
-export { UserErrors, UserIdErrors, UserMapErrors, UseCaseErrors } from "./user";
+export {
+  UserErrors,
+  UserIdErrors,
+  UserEmailErrors,
+  UserSecretErrors,
+  UserMapErrors,
+} from "./user";

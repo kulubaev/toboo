@@ -43,7 +43,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@toboo/shared": "^0.0.19",
+    "@toboo/shared": "^0.0.22",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "lodash.groupby": "^4.6.0",

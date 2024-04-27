@@ -11,7 +11,7 @@
  */
 
 import { DomainError, ISerializeError } from "@toboo/shared";
-import { UserId } from "../../../domain";
+import { UserId, UserEmail } from "../../domain";
 
 /**
  *
@@ -29,7 +29,7 @@ export namespace UserErrors {
       private readonly id: UserId,
       reason: string | void,
     ) {
-      super(reason, "User Map failed");
+      super(reason, "User not found");
     }
     /**
      *
@@ -90,6 +90,85 @@ export namespace UserErrors {
 
       return {
         message: `Users can not be retrieved`,
+      };
+    }
+  }
+  /**
+   *
+   */
+  export class UserHydrateFailed extends DomainError {
+    /*
+     */
+
+    constructor(
+      readonly id: string,
+      reason: string | void,
+      message?: string,
+    ) {
+      super(reason, message || "User hydrate failed");
+    }
+    /**
+     *
+     */
+
+    serialize(): ISerializeError {
+      /*
+       */
+
+      return {
+        message: `User with id ${this.id} can not be hydrated`,
+      };
+    }
+  }
+
+  /**
+   *
+   */
+  export class UserPersistFailed extends DomainError {
+    /*
+     */
+
+    constructor(
+      readonly id: string,
+      reason: string | void,
+      message?: string,
+    ) {
+      super(reason, message || "User aggregateroot persistence failed");
+    }
+    /**
+     *
+     */
+
+    serialize(): ISerializeError {
+      /*
+       */
+
+      return {
+        message: `User aggregate root with id ${this.id} can not be persisted`,
+      };
+    }
+  }
+
+  /**
+   *
+   */
+  export class UserCreationFailed extends DomainError {
+    /*
+     */
+
+    constructor(reason: string | void, message?: string) {
+      super(reason, message || "User creation failed");
+    }
+    /**
+     *
+     */
+
+    serialize(): ISerializeError {
+      /*
+       */
+
+      return {
+        message: `User can not be created. System error, please try later`,
       };
     }
   }

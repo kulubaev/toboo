@@ -11,13 +11,15 @@
  */
 
 import express, { Request, Response } from "express";
-import { getUserApi } from "../../use.case";
+import { getUserApi, createUserApi } from "../../use.case";
 
 const router = express.Router();
 
 /**
  */
-router.post("/signup", (req: Request, res: Response) => {});
+router.post("/signup", (req: Request, res: Response) => {
+  createUserApi.execute(req, res);
+});
 /**
  */
 router.post("/signin", (req: Request, res: Response) => {});

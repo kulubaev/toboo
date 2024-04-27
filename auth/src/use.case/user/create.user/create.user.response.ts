@@ -12,15 +12,14 @@
 
 import { DomainErrors, Either, UseCaseErrors } from "@toboo/shared";
 import { UserDto } from "../../../dto";
-import { GetUserErrors } from "./get.user.errors";
+import { CreateUserErrors } from "./create.user.errors";
 
 /**
  *
  */
-export type GetUserResponse = Either<
+export type CreateUserResponse = Either<
   | DomainErrors.UnexpectedHalt
-  | GetUserErrors.UserRetrievalFailed
-  | GetUserErrors.UserCanNotBeFound
+  | CreateUserErrors.UserCreationFailed
   | UseCaseErrors.InvalidDataError
   | UseCaseErrors.RequiredFieldError,
   UserDto

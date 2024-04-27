@@ -10,13 +10,40 @@
  * ```
  */
 
-import { UseCaseError } from "@toboo/shared";
+import { UseCaseError, ISerializeError } from "@toboo/shared";
 
 /**
  *
  *
  */
 export namespace GetUserErrors {
+  /**
+   *
+   */
+  export class UserCanNotBeFound extends UseCaseError {
+    /**
+     */
+    constructor(
+      readonly parameter: string,
+      message: string,
+    ) {
+      super(parameter, message);
+    }
+
+    /**
+     *
+     */
+
+    serialize(): ISerializeError {
+      /*
+       */
+
+      return {
+        message: `User with id ${this.parameter} can not be found`,
+      };
+    }
+  }
+
   /**
    *
    */
@@ -28,6 +55,19 @@ export namespace GetUserErrors {
       message: string,
     ) {
       super(parameter, message);
+    }
+
+    /**
+     *
+     */
+
+    serialize(): ISerializeError {
+      /*
+       */
+
+      return {
+        message: `User with id ${this.parameter} can not be found`,
+      };
     }
   }
   /**
